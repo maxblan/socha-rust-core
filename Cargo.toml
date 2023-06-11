@@ -1,0 +1,16 @@
+[package]
+name = "socha-rust-core"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "socha_rust_core"
+crate-type = ["cdylib"]
+
+[dependencies]
+libm = "0.2.5"
+libmath = "0.2.1"
+regex = "1.7.1"
+yaserde = "0.8.0"
+yaserde_derive = "0.8.0"
