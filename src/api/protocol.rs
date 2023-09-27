@@ -38,11 +38,11 @@ pub struct Protocol {
     close: Option<Close>,
 }
 
-#[derive(Clone, Debug, Default, YaDeserialize, YaSerialize)]
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
 #[yaserde(rename = "join")]
 pub struct Join {}
 
-#[derive(Clone, Debug, Default, YaDeserialize, YaSerialize)]
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
 #[yaserde(rename = "room")]
 pub struct Room {
     #[yaserde(attribute, rename = "roomId")]
@@ -52,7 +52,7 @@ pub struct Room {
     pub data: Data,
 }
 
-#[derive(Clone, Debug, Default, YaDeserialize, YaSerialize)]
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
 #[yaserde(rename = "data")]
 pub struct Data {
     #[yaserde(attribute)]
@@ -92,15 +92,27 @@ pub enum DataClass {
 }
 
 
-#[derive(Clone, Debug, Default, YaDeserialize, YaSerialize)]
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
 pub struct Move {
-    #[yaserde(rename = "from")]
-    pub from: Option<Coordinate>,
-    #[yaserde(rename = "to")]
+    #[yaserde(rename = "from", child)]
+    pub from: Coordinate,
+    #[yaserde(rename = "to", child)]
     pub to: Coordinate,
 }
 
-#[derive(Clone, Debug, Default, YaDeserialize, YaSerialize)]
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
+pub struct Coordinate {
+    #[yaserde(attribute)]
+    pub q: i32,
+
+    #[yaserde(attribute)]
+    pub r: i32,
+
+    #[yaserde(attribute)]
+    pub s: i32,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
 #[yaserde(rename = "state")]
 pub struct State {
     #[yaserde(rename = "startTeam")]
@@ -116,35 +128,27 @@ pub struct State {
     pub fishes: Option<Fishes>,
 }
 
-#[derive(Clone, Debug, Default, YaDeserialize, YaSerialize)]
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
 #[yaserde(rename = "board")]
 pub struct Board {
     #[yaserde(rename = "list")]
     pub lists: Vec<List>,
 }
 
-#[derive(Clone, Debug, Default, YaDeserialize, YaSerialize)]
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
 #[yaserde(rename = "list")]
 pub struct List {
     #[yaserde(rename = "field")]
     fields: Vec<String>,
 }
 
-#[derive(Clone, Debug, Default, YaDeserialize, YaSerialize)]
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
 #[yaserde(rename = "fishes")]
 pub struct Fishes {
     #[yaserde(rename = "int")]
     pub ints: Vec<String>,
 }
 
-#[derive(Clone, Debug, Default, YaDeserialize, YaSerialize)]
-pub struct Coordinate {
-    #[yaserde(attribute)]
-    pub x: i32,
-
-    #[yaserde(attribute)]
-    pub y: i32,
-}
 
 #[derive(Clone, Default, PartialEq, Debug, YaDeserialize, YaSerialize)]
 #[yaserde(rename = "definition")]
@@ -228,7 +232,7 @@ pub struct JoinPrepared {
 #[yaserde(rename = "errorpacket")]
 pub struct ErrorPacket {
     #[yaserde(attribute, rename = "message")]
-    message: String,
+    pub message: String,
 
     #[yaserde(rename = "originalRequest")]
     original_request: OriginalRequest,

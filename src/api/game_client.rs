@@ -155,7 +155,7 @@ impl GameClient {
 }
 
 impl Data {
-    fn new_move(m: Move) -> Self {
+    pub fn new_move(m: Move) -> Self {
         Self {
             class: DataClass::Move,
             color: None,
@@ -176,6 +176,11 @@ impl ProtocolPacket {
                     .map_err(|_| ProtocolError::ParseError)?;
                 Ok(ProtocolPacket::Joined(joined))
             }
+            s if s.contains("joinPrepared") => {
+                let join_prepared: JoinPrepared = from_str(&xml_str)
+                    .map_err(|_| ProtocolError::ParseError)?;
+                Ok(ProtocolPacket::JoinPrepared(join_prepared))
+            }
             s if s.contains("join") => {
                 let join: Join = from_str(&xml_str)
                     .map_err(|_| ProtocolError::ParseError)?;
@@ -190,11 +195,6 @@ impl ProtocolPacket {
                 let left: Left = from_str(&xml_str)
                     .map_err(|_| ProtocolError::ParseError)?;
                 Ok(ProtocolPacket::Left(left))
-            }
-            s if s.contains("joinPrepared") => {
-                let join_prepared: JoinPrepared = from_str(&xml_str)
-                    .map_err(|_| ProtocolError::ParseError)?;
-                Ok(ProtocolPacket::JoinPrepared(join_prepared))
             }
             s if s.contains("errorpacket") => {
                 let error_packet: ErrorPacket = from_str(&xml_str)
