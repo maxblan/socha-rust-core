@@ -113,33 +113,133 @@ pub struct Coordinate {
 }
 
 #[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
+pub enum CubeDirection {
+    #[default]
+    #[yaserde(rename = "RIGHT")]
+    Right,
+    #[yaserde(rename = "UP_RIGHT")]
+    UpRight,
+    #[yaserde(rename = "UP")]
+    Up,
+    #[yaserde(rename = "UP_LEFT")]
+    UpLeft,
+    #[yaserde(rename = "LEFT")]
+    Left,
+    #[yaserde(rename = "DOWN_LEFT")]
+    DownLeft,
+    #[yaserde(rename = "DOWN")]
+    Down,
+    #[yaserde(rename = "DOWN_RIGHT")]
+    DownRight,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
+pub struct Water;
+
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
+pub struct Island;
+
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
+pub struct Sandbank;
+
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
+pub struct Passenger {
+    #[yaserde(attribute)]
+    pub direction: CubeDirection,
+    #[yaserde(attribute)]
+    pub passenger: i32,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
+pub struct Goal;
+
+
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
+#[yaserde(rename = "field-array")]
+pub struct FieldArray {
+    #[yaserde(rename = "water")]
+    pub water: Vec<Water>,
+    #[yaserde(rename = "island")]
+    pub island: Vec<Island>,
+    #[yaserde(rename = "sandbank")]
+    pub sandbank: Vec<Sandbank>,
+    #[yaserde(rename = "passenger")]
+    pub passenger: Vec<Passenger>,
+    #[yaserde(rename = "goal")]
+    pub goal: Vec<Goal>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
+pub struct Ship {
+    #[yaserde(attribute)]
+    pub team: String,
+
+    #[yaserde(attribute)]
+    pub direction: CubeDirection,
+
+    #[yaserde(attribute)]
+    pub speed: i32,
+
+    #[yaserde(attribute)]
+    pub coal: i32,
+
+    #[yaserde(attribute)]
+    pub passengers: i32,
+
+    #[yaserde(attribute, rename = "freeTurns")]
+    pub free_turns: i32,
+
+    #[yaserde(attribute)]
+    pub points: i32,
+
+    pub  position: Coordinate,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
 #[yaserde(rename = "state")]
 pub struct State {
-    #[yaserde(rename = "startTeam")]
+    #[yaserde(attribute)]
+    pub class: String,
+
+    #[yaserde(attribute, rename = "startTeam")]
     pub start_team: String,
 
-    #[yaserde(rename = "board")]
+    #[yaserde(attribute)]
+    pub turn: i32,
+
+    #[yaserde(attribute, rename = "currentTeam")]
+    pub current_team: String,
+
     pub board: Board,
 
-    #[yaserde(rename = "lastMove")]
-    pub last_move: Option<Move>,
+    pub ship: Vec<Ship>,
+}
 
-    #[yaserde(rename = "fishes")]
-    pub fishes: Option<Fishes>,
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
+pub struct Segment {
+    #[yaserde(attribute)]
+    pub direction: CubeDirection,
+
+    pub center: Coordinate,
+
+    #[yaserde(rename = "field-array")]
+    pub field_array: Vec<FieldArray>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
 #[yaserde(rename = "board")]
 pub struct Board {
-    #[yaserde(rename = "list")]
-    pub lists: Vec<List>,
+    #[yaserde(attribute, rename = "nextDirection")]
+    pub next_direction: CubeDirection,
+
+    pub segment: Vec<Segment>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
 #[yaserde(rename = "list")]
 pub struct List {
     #[yaserde(rename = "field")]
-    fields: Vec<String>,
+    pub fields: Vec<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
