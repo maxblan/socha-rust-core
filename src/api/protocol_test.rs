@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use crate::api::protocol::{Move, Join, DataClass, Coordinate, Data, Room, CubeDirection, FieldArray, Water, Island, Sandbank, Passenger, Goal, State, Ship, Segment, Board};
+    use crate::api::protocol::{Move, Join, DataClass, Coordinate, Data, Room, CubeDirection, FieldArray, Water, Island, Sandbank, Passenger, Goal, State, Ship, Segment, Board, Team};
 
     #[test]
     fn test_join_deserialization() {
@@ -106,9 +106,9 @@ mod tests {
             field_array, 
             State { 
                 class: "state".to_string(), 
-                start_team: "ONE".to_string(), 
+                start_team: Team::One, 
                 turn: 0, 
-                current_team: "ONE".to_string(), 
+                current_team: Team::One, 
                 board: Board { 
                     next_direction: CubeDirection::DownRight, 
                     segment: vec![Segment { 
@@ -124,7 +124,7 @@ mod tests {
                         ] }] }, 
                         ship: vec![
                             Ship { 
-                            team: "ONE".to_string(), 
+                            team: Team::One, 
                             direction: CubeDirection::Right, 
                             speed: 1, 
                             coal: 6, 
@@ -133,7 +133,7 @@ mod tests {
                             points: 0, 
                             position: Coordinate { q: -1, r: -1, s: 2 } }, 
                             Ship { 
-                                team: "TWO".to_string(),
+                                team: Team::Two,
                                 direction: CubeDirection::Right, 
                                 speed: 1, 
                                 coal: 6, 

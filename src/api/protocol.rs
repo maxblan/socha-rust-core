@@ -170,9 +170,18 @@ pub struct FieldArray {
 }
 
 #[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
+pub enum Team {
+    #[default]
+    #[yaserde(rename = "ONE")]
+    One,
+    #[yaserde(rename = "TWO")]
+    Two,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, YaDeserialize, YaSerialize)]
 pub struct Ship {
     #[yaserde(attribute)]
-    pub team: String,
+    pub team: Team,
 
     #[yaserde(attribute)]
     pub direction: CubeDirection,
@@ -202,13 +211,13 @@ pub struct State {
     pub class: String,
 
     #[yaserde(attribute, rename = "startTeam")]
-    pub start_team: String,
+    pub start_team: Team,
 
     #[yaserde(attribute)]
     pub turn: i32,
 
     #[yaserde(attribute, rename = "currentTeam")]
-    pub current_team: String,
+    pub current_team: Team,
 
     pub board: Board,
 
@@ -286,7 +295,7 @@ pub struct Player {
     #[yaserde(attribute)]
     name: String,
     #[yaserde(attribute)]
-    team: String,
+    team: Team,
 }
 
 #[derive(Clone, Default, PartialEq, Debug, YaDeserialize, YaSerialize)]
@@ -304,7 +313,7 @@ pub struct Score {
 #[yaserde(rename = "winner")]
 pub struct Winner {
     #[yaserde(attribute)]
-    team: String,
+    team: Team,
 }
 
 #[derive(Clone, Debug, Default, YaDeserialize, YaSerialize)]
